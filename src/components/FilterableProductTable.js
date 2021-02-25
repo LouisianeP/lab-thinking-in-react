@@ -4,7 +4,8 @@ import SearchBar from './SearchBar';
 
 export default class FilterableProductTable extends Component {
     state= {
-        search:''
+        search:'',
+        stocked:''
     }
     setSearch = searchParam => {
         this.setState({
@@ -12,11 +13,21 @@ export default class FilterableProductTable extends Component {
         })
     }
 
+    setCheckBox = searchParam => {
+        console.log(searchParam)
+        this.setState({
+            stocked: searchParam
+        })
+    }
+
     render() {
 
     const spread = this.props.products
  
-    const filteredProducts = spread.filter(product => product.name.toLowerCase().includes(this.state.search.toLowerCase()))
+    const filteredProducts = spread.filter(product => {
+        return product.name.toLowerCase().includes(this.state.search.toLowerCase())
+        && ((product.stocked === this.state.stocked) || !this.state.stocked)
+    })
     
     console.log(filteredProducts)
 
@@ -26,6 +37,8 @@ export default class FilterableProductTable extends Component {
                 <SearchBar 
                 search={this.state.search}
                 setSearch={this.setSearch}
+                stocked={this.state.stocked}
+                setCheckBox={this.setCheckBox}
                 />
                 <ProductTable filteredProducts={filteredProducts}/>
             </div>
